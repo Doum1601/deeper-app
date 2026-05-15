@@ -198,6 +198,11 @@ export function getConfig(): DeeperClientConfig {
 // e.g. fetch(`http://${currentConfig.ip}/api/system/status`)
 
 export async function pingDeeper(ip: string, timeoutMs = 1500): Promise<boolean> {
+  // On web HTTPS preview, fetching plain http://... throws Mixed Content errors.
+  // Skip and let the UI fall back to demo gracefully.
+  if (typeof window !== "undefined" && (window as any)?.location?.protocol === "https:") {
+    return false;
+  }
   // Try a HEAD or GET against the IP. If reachable -> true.
   try {
     const controller = new AbortController();
