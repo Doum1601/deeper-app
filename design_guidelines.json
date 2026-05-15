@@ -1,0 +1,138 @@
+{
+  "theme_and_archetype": {
+    "theme": "Dark-First (Switchable to Light)",
+    "archetype": "Archetype 4: Swiss & High-Contrast (adapted for technical hardware control)",
+    "description": "A premium prosumer networking control app. It feels like a command center. Objective, rigid, and functional. 95% of the UI is monochrome, color exists only to guide action and indicate status (e.g., active tunnels, bandwidth).",
+    "forbidden_patterns": [
+      "Purple or teal gradients",
+      "Soft pastel colors in dark mode",
+      "Neumorphism shadows in dark mode",
+      "Center-everything alignment"
+    ]
+  },
+  "typography": {
+    "rules": {
+      "anti_default_rule": "Inter is banned for headings. Use IBM Plex Sans for structure and IBM Plex Mono for technical data.",
+      "pairing_archetype": "Swiss Brutalist (Tech): One primary font family with radical weight contrast, paired with a Mono font for numbers."
+    },
+    "fonts": {
+      "heading": "IBM Plex Sans (or Chivo)",
+      "data_numbers": "IBM Plex Mono",
+      "body": "Inter"
+    },
+    "hierarchy": {
+      "h1_hero": "text-4xl sm:text-5xl font-black tracking-tight leading-none",
+      "h2_section": "text-2xl sm:text-3xl font-bold tracking-tight",
+      "h3_card": "text-lg sm:text-xl font-semibold",
+      "data_large": "text-3xl sm:text-4xl font-mono tracking-tighter",
+      "body": "text-base leading-relaxed",
+      "labels_overlines": "text-xs font-bold uppercase tracking-[0.2em]"
+    }
+  },
+  "color_system": {
+    "dark_mode": {
+      "base_bg": "#050505",
+      "surface": "#121212",
+      "surface_elevated": "#1A1A1A",
+      "border": "rgba(255,255,255,0.1)",
+      "text_primary": "#F3F4F6",
+      "text_secondary": "#9CA3AF",
+      "accent_primary": "#00E5FF",
+      "accent_secondary": "#FFB300",
+      "status_success": "#00FF66",
+      "status_error": "#FF3B30"
+    },
+    "light_mode": {
+      "base_bg": "#FAFAFA",
+      "surface": "#FFFFFF",
+      "surface_elevated": "#F3F4F6",
+      "border": "rgba(0,0,0,0.1)",
+      "text_primary": "#111827",
+      "text_secondary": "#6B7280",
+      "accent_primary": "#0055FF",
+      "accent_secondary": "#D97706",
+      "status_success": "#10B981",
+      "status_error": "#EF4444"
+    },
+    "rules": [
+      "Never use pure #000000; #050505 gives a slightly more deliberate tech feel.",
+      "Accent colors must be highly saturated for maximum visibility against dark surfaces.",
+      "Hover/Active states should increase contrast, not decrease it."
+    ]
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Use Tailwind generic scale: p-2, p-4, p-6, p-8. Be generous with negative space.",
+    "bento_grid_mobile": "Mobile-first Control Room Grid: 1 column wide for main charts (Bandwidth), 2 columns for secondary metrics (CPU, RAM).",
+    "surface_strategy": "The 'Technical' Look: Grid Borders. Cards have flat backgrounds and 1px borders. NO soft shadows in dark mode.",
+    "alignment": "Left-align dense content and numbers. Center-align only splash screens or empty states."
+  },
+  "components": {
+    "cards": "Flat background, rounded-xl, 1px subtle border. No shadows in dark mode.",
+    "buttons": "Sharp or slightly rounded (rounded-md). High contrast. Primary buttons use accent color background with inverted text. Secondary buttons are transparent with 1px border.",
+    "toggles_switches": "When Active, track uses Accent Primary (Cyan) or Status Success (Green). When Inactive, track is surface_elevated.",
+    "segmented_controls": "Used for Smart Route / Full Route. Background surface_elevated, active item surface with 1px border.",
+    "charts": "Line charts for bandwidth should use smooth bezier curves. Fill under the line with a subtle gradient of the line color (opacity 20% to 0%).",
+    "icons": "Use lucide-react-native or @expo/vector-icons (Feather/Phosphor) for a clean, consistent technical look."
+  },
+  "screens": {
+    "onboarding_login": {
+      "layout": "Full screen, immersive.",
+      "elements": [
+        "Background: splash_network_mesh (set to cover, opacity 0.4).",
+        "Logo centered, glowing text 'Scanning Network...'",
+        "Manual IP fallback entry below.",
+        "Login view: Admin password input, prominent Biometric (FaceID/TouchID) button."
+      ]
+    },
+    "dashboard": {
+      "layout": "Scrollable vertical bento grid.",
+      "elements": [
+        "Header: Connection status indicator (dot) + 'AtomOS Online'.",
+        "Bandwidth Card: Real-time download/upload with sparkline chart. Monospace fonts for Mbps.",
+        "Hardware Stats Grid: 2x2 grid of small cards for CPU%, RAM%, Temp, Uptime.",
+        "Quick Actions: 4 rectangular toggle buttons for DPN, AdBlock, Parental Controls."
+      ]
+    },
+    "dpn_management": {
+      "layout": "List-based with sticky top controls.",
+      "elements": [
+        "Top: Segmented control for Mode (Smart Route / Full Route).",
+        "Active Tunnels: Card list. Each card shows Country Flag, Node IP, and Latency (Green <50ms, Yellow <150ms).",
+        "Add Tunnel Button: Dashed border card.",
+        "Reboot Device: Danger zone button at the bottom."
+      ]
+    },
+    "devices": {
+      "layout": "List view.",
+      "elements": [
+        "List item: Device Icon (laptop, phone), Name, IP (Mono), Tx/Rx traffic indicator.",
+        "Each row has a mini DPN toggle switch to bypass/route traffic."
+      ]
+    }
+  },
+  "media": {
+    "images": [
+      {
+        "category": "splash_background",
+        "url": "https://static.prod-images.emergentagent.com/jobs/ad5fdbd6-4f0a-4470-88fb-c778153c1f46/images/1074d30cc8c07e6ae5d4799eff2668d6f8c566f88cdc199365662db38ec9cc6a.png",
+        "description": "Abstract tech network mesh, dark deep obsidian background, glowing electric cyan and signal amber nodes."
+      },
+      {
+        "category": "app_logo",
+        "url": "https://static.prod-images.emergentagent.com/jobs/ad5fdbd6-4f0a-4470-88fb-c778153c1f46/images/85a8d490341c61ad2e5cbde1ab986e638070af3e90832b2cc0eb5945bb63b840.png",
+        "description": "Modern sleek logo icon for a cybersecurity router, minimalist shield mixed with infinity loop."
+      }
+    ],
+    "icons_library": "lucide-react-native"
+  },
+  "motion_and_interactions": {
+    "transitions": "Fast, precise micro-interactions (0.15s ease-out). Hardware tools should feel instantaneous.",
+    "charts": "Live data should animate fluidly.",
+    "toggles": "Satisfying snap animation with color transition."
+  },
+  "accessibility": {
+    "test_ids": "ALL interactive elements MUST have testID prop for React Native. Format: kebab-case, role-based. e.g. testID=\"dpn-toggle-switch\"",
+    "contrast": "Ensure text over dark backgrounds meets minimum 4.5:1 ratio."
+  },
+  "instructions_to_main_agent": "Implement these guidelines in React Native code using .js files. Use standard React Native StyleSheet or NativeWind. Ensure all layouts are mobile-first and responsive. Integrate testID props everywhere. Provide a strict dark/light mode context or global style object based on the colors specified."
+}
