@@ -165,6 +165,19 @@ export default function Scan() {
             >
               <Text style={[styles.demoText, { color: colors.accentPrimary }]}>{t("scan_demo")}</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              testID="scan-advanced-button"
+              activeOpacity={0.8}
+              onPress={() => router.push("/onboarding/advanced")}
+              style={[styles.advancedBtn, { borderColor: colors.borderStrong, backgroundColor: colors.surface }]}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.advancedTitle, { color: colors.textPrimary }]}>{t("scan_advanced")}</Text>
+                <Text style={[styles.advancedSub, { color: colors.textMuted }]}>{t("scan_advanced_desc")}</Text>
+              </View>
+              <ArrowRight size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -196,4 +209,7 @@ const styles = StyleSheet.create({
   secondaryBtnText: { fontSize: 15, fontWeight: "700" },
   demoBtn: { alignItems: "center", padding: 14, marginTop: 6 },
   demoText: { fontSize: 13, fontWeight: "700", letterSpacing: 0.5 },
+  advancedBtn: { flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 12, borderWidth: 1, marginTop: 8 },
+  advancedTitle: { fontSize: 14, fontWeight: "800", letterSpacing: 0.2 },
+  advancedSub: { fontSize: 11, marginTop: 3, fontWeight: "600" },
 });

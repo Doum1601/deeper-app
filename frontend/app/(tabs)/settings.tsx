@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity, TextInput, Alert, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { Sun, Moon, Languages, Lock, Fingerprint, Wifi, LogOut, ChevronRight, Edit3, Check, X, Info, Router } from "lucide-react-native";
+import { Sun, Moon, Languages, Lock, Fingerprint, Wifi, LogOut, ChevronRight, Edit3, Check, X, Info, Router, Globe } from "lucide-react-native";
 import { useApp } from "@/src/contexts/AppContext";
 
 export default function Settings() {
@@ -157,6 +157,14 @@ export default function Settings() {
               </TouchableOpacity>
             </View>
           )}
+          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+          <TouchableOpacity testID="settings-atomos" onPress={() => router.push({ pathname: "/webview", params: { ip: deeperIp } })} activeOpacity={0.7} style={styles.rowBetween}>
+            <View style={styles.rowLeft}>
+              <Globe size={18} color={colors.accentPrimary} />
+              <Text style={[styles.label, { color: colors.textPrimary }]}>{t("settings_atomos")}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
           <TouchableOpacity testID="settings-multi-deeper" onPress={() => router.push("/settings/multi-deeper")} activeOpacity={0.7} style={styles.rowBetween}>
             <View style={styles.rowLeft}>

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Animated, Easing, Dimensions } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Animated, Easing, Linking } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ShieldCheck, ArrowRight } from "lucide-react-native";
+import { ShieldCheck, ArrowRight, ExternalLink } from "lucide-react-native";
 import { useApp } from "@/src/contexts/AppContext";
 
 const SPLASH_BG = "https://static.prod-images.emergentagent.com/jobs/ad5fdbd6-4f0a-4470-88fb-c778153c1f46/images/1074d30cc8c07e6ae5d4799eff2668d6f8c566f88cdc199365662db38ec9cc6a.png";
@@ -34,6 +34,16 @@ export default function Welcome() {
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t("welcome_subtitle")}</Text>
 
           <TouchableOpacity
+            testID="welcome-visit-securityforge"
+            activeOpacity={0.7}
+            onPress={() => Linking.openURL("https://securityforge.ca")}
+            style={[styles.visitLink, { borderColor: colors.borderStrong, backgroundColor: colors.surface }]}
+          >
+            <ExternalLink size={14} color={colors.accentPrimary} strokeWidth={2} />
+            <Text style={[styles.visitLinkText, { color: colors.accentPrimary }]}>{t("welcome_visit")}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             testID="welcome-start-button"
             activeOpacity={0.85}
             onPress={() => router.push("/onboarding/scan")}
@@ -54,7 +64,9 @@ const styles = StyleSheet.create({
   logoBox: { width: 72, height: 72, borderRadius: 18, borderWidth: 1, alignItems: "center", justifyContent: "center", marginBottom: 28 },
   overline: { fontSize: 11, fontWeight: "800", letterSpacing: 3, marginBottom: 12 },
   title: { fontSize: 42, fontWeight: "900", letterSpacing: -1, lineHeight: 46 },
-  subtitle: { fontSize: 16, marginTop: 14, marginBottom: 40, lineHeight: 22 },
+  subtitle: { fontSize: 16, marginTop: 14, marginBottom: 24, lineHeight: 22 },
+  visitLink: { flexDirection: "row", alignItems: "center", alignSelf: "flex-start", gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 100, borderWidth: 1, marginBottom: 36 },
+  visitLinkText: { fontSize: 13, fontWeight: "700", letterSpacing: 0.4 },
   cta: { flexDirection: "row", alignItems: "center", justifyContent: "center", height: 56, borderRadius: 14, gap: 10 },
   ctaText: { fontSize: 16, fontWeight: "800", letterSpacing: 0.3 },
 });
