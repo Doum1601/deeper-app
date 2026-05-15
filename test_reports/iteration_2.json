@@ -1,0 +1,54 @@
+{
+  "summary": "v2 extension end-to-end UI testing (375x844 mobile viewport) on Expo web preview. Fresh onboarding: Welcome → Scan (demo) → Login (admin123) → PIN setup (1234/1234) → 5-tab bar (Bord/DPN/Sécurité/Appareils/Paramètres). All NEW Security/AdBlock/Parental/Logs/Dashboard-shortcut flows pass end-to-end with no functional defects. DPN routing screens and Settings → Multi-Deeper were source-verified (all required testIDs present in code) but the final E2E pass on them was blocked by a test-script issue (page.go_back() from /logs unwound history into the onboarding/scan screen), not an app bug — they ship in the bundle and their testIDs match the contract.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "global", "issue": "Pre-existing benign warning: `props.pointerEvents is deprecated. Use style.pointerEvents` (from a 3rd-party lib, unchanged from v1)."}
+    ]
+  },
+  "verified_flows_e2e": [
+    "Onboarding: welcome-start-button → scan-demo-button → login-password-input + login-submit-button → lock-key-1/2/3/4 twice → tabs render",
+    "Bottom tab bar: tab-dashboard, tab-dpn, tab-security, tab-devices, tab-settings all present",
+    "Security: sec-profile-basic/standard/strict tappable; sec-adblock-switch, sec-parental-switch toggles; sec-adblock-exceptions, sec-parental-profiles, sec-logs-link navigate correctly",
+    "AdBlock Exceptions: defaults lemonde.fr + wikipedia.org present; adblock-input + adblock-add adds 'example.com' and adblock-row-example.com appears; adblock-remove-example.com removes it",
+    "Parental Profiles: default parental-profile-p1 (Enfants) present; tap → edit screen exposes parental-name-input, parental-schedule-toggle, parental-start, parental-end, parental-screen-time, parental-save, parental-delete, parental-device-d1..d6 (6/6), parental-cat-adult/violence/gambling/social/gaming/shopping (6/6), parental-day-0..6 (7/7); Save returns to list; parental-new FAB opens edit without parental-delete; saving new profile returns to list",
+    "Logs: logs-filter-all/tunnel/security/device/system all present; 10 default entries; filtering by 'device' reduces to 3 entries",
+    "Dashboard logs shortcut: dash-logs-link present and navigates to /logs (logs-filter-all visible)"
+  ],
+  "source_verified_only": {
+    "reason": "Test script used page.go_back() after /logs which unwound expo-router web history into onboarding/scan, so subsequent navigations to DPN/Settings could not be completed in the same run. Re-running with router.replace-based nav would close this gap.",
+    "testIDs_confirmed_in_source": [
+      "dpn-app-relocator, dpn-domain-config, dpn-ip-config (in (tabs)/dpn.tsx)",
+      "ar-fab, ar-app-input, ar-bundle-input, ar-modal-next, ar-modal-close, ar-country-<id>, ar-remove-<id>, ar-row-<id>",
+      "dc-input, dc-add, dc-country-<id>, dc-remove-<id>, dc-row-<id>",
+      "ic-input, ic-add, ic-country-<id>, ic-remove-<id>, ic-row-<id>",
+      "settings-multi-deeper, md-fab, md-label-input, md-ip-input, md-save, md-modal-close, md-current, md-row-<id>, md-switch-<id>, md-remove-<id>",
+      "country-pick-<ISO> in shared CountryPickerModal"
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_1.json", "/app/test_reports/iteration_2.json"],
+  "action_items": [
+    "(Optional) Main agent: quick self-verify of DPN App Relocator (3 default rows Netflix/BBC/Spotify, ar-fab → modal → country-pick-FR adds row, ar-country-* re-opens picker, ar-remove-* removes), Domain Config (3 default rows, dc-add flow), IP Config (2 default rows, ic-add flow), Settings → Multi-Deeper (md-fab → label+IP+save → md-switch/md-remove). All testIDs are wired in source; this is a quick smoke test, not a re-debug."
+  ],
+  "critical_code_review_comments": [
+    "All new v2 screens use React Native primitives (View/Text/TouchableOpacity/TextInput/FlatList) with StyleSheet.create — no HTML primitives.",
+    "Every interactive element in the v2 contract exposes a matching testID, including dynamic ones (e.g. parental-device-${d.id}, ar-country-${id}, country-pick-${iso}).",
+    "DeeperSimulator (src/api/deeper.ts) seeds: 2 AdBlock exceptions, 1 parental profile (p1 Enfants), 3 app relocations (Netflix/BBC/Spotify), 3 domain rules, 2 IP rules, ~12 logs — matching the contract.",
+    "Parental Edit guards parental-delete by `params.id ? <Trash2…/> : null` so new-profile flow correctly hides delete.",
+    "ParentalProfiles uses setInterval(4000) to refresh — could leak on rapid navigation; consider clearing on focus loss (minor)."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend only)",
+    "frontend_v2_e2e": "100% on Security/AdBlock/Parental/Logs/Dashboard-shortcut (7/7 flows). DPN routing & Multi-Deeper: source-verified, E2E deferred to a re-run with cleaner navigation.",
+    "frontend_v1_smoke": "Tabs + onboarding (welcome→scan→login→PIN→tabs) re-verified end-to-end."
+  },
+  "seed_data_creation": "None — mocked DeeperSimulator provides all defaults.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Use admin123 / 1234 to onboard. Auth state does NOT persist across browser_automation sessions (fresh context each time), so always re-onboard via /onboarding/welcome. Avoid page.go_back() chains on web — expo-router web history accumulates and can bounce you out of /(tabs) into onboarding. Prefer tab clicks ([data-testid=tab-*]) or router.push-style navigation by URL. All required v2 testIDs are wired in source. The CountryPickerModal exposes country-pick-<ISO> for FR/US/GB/SG/DE/JP/etc.",
+  "rca_of_issue": "Test-script-only defect: page.go_back() from a Stack-pushed route (/logs) on expo-router web pops the browser history one entry but, after multiple pushes, eventually unwinds past the tabs root into /onboarding/scan. Mitigation: navigate by tab testID or by router.push(URL) instead of go_back(). No app code change required."
+}

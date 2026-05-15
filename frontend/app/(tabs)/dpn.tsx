@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Globe2, Plus, Power, RotateCw, Check, X, ChevronRight, Zap, Signal, Trash2 } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Globe2, Plus, Power, RotateCw, Check, X, ChevronRight, Zap, Signal, Trash2, Smartphone, Network } from "lucide-react-native";
 import { useApp } from "@/src/contexts/AppContext";
 import { fetchState, setMode, setCountry, addTunnel, removeTunnel, rebootDeeper, DeeperState, DpnMode, COUNTRIES, Country } from "@/src/api/deeper";
 
@@ -12,6 +13,7 @@ function latencyColor(ms: number, c: any) {
 }
 
 export default function DPN() {
+  const router = useRouter();
   const { colors, t } = useApp();
   const [state, setState] = useState<DeeperState | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -135,6 +137,43 @@ export default function DPN() {
           <Plus size={18} color={colors.accentPrimary} />
           <Text style={[styles.addTunnelText, { color: colors.accentPrimary }]}>{t("dpn_add_tunnel")}</Text>
         </TouchableOpacity>
+
+        {/* Advanced routing */}
+        <Text style={[styles.section, { color: colors.textSecondary, marginTop: 26 }]}>{t("dpn_advanced")}</Text>
+        <View style={[styles.advCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <TouchableOpacity testID="dpn-app-relocator" onPress={() => router.push("/dpn/app-relocator")} activeOpacity={0.7} style={styles.advRow}>
+            <View style={styles.advLeft}>
+              <Smartphone size={18} color={colors.accentPrimary} />
+              <View>
+                <Text style={[styles.advLabel, { color: colors.textPrimary }]}>{t("dpn_app_relocator")}</Text>
+                <Text style={[styles.advSub, { color: colors.textMuted }]}>{t("dpn_app_relocator_desc")}</Text>
+              </View>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+          <View style={[styles.advDivider, { backgroundColor: colors.border }]} />
+          <TouchableOpacity testID="dpn-domain-config" onPress={() => router.push("/dpn/domain-config")} activeOpacity={0.7} style={styles.advRow}>
+            <View style={styles.advLeft}>
+              <Globe2 size={18} color={colors.accentPrimary} />
+              <View>
+                <Text style={[styles.advLabel, { color: colors.textPrimary }]}>{t("dpn_domain_config")}</Text>
+                <Text style={[styles.advSub, { color: colors.textMuted }]}>{t("dpn_domain_config_desc")}</Text>
+              </View>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+          <View style={[styles.advDivider, { backgroundColor: colors.border }]} />
+          <TouchableOpacity testID="dpn-ip-config" onPress={() => router.push("/dpn/ip-config")} activeOpacity={0.7} style={styles.advRow}>
+            <View style={styles.advLeft}>
+              <Network size={18} color={colors.accentPrimary} />
+              <View>
+                <Text style={[styles.advLabel, { color: colors.textPrimary }]}>{t("dpn_ip_config")}</Text>
+                <Text style={[styles.advSub, { color: colors.textMuted }]}>{t("dpn_ip_config_desc")}</Text>
+              </View>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
 
         {/* Danger zone */}
         <Text style={[styles.section, { color: colors.textSecondary, marginTop: 26 }]}>DANGER ZONE</Text>
@@ -261,4 +300,10 @@ const styles = StyleSheet.create({
   confirmBtnText: { fontSize: 14, fontWeight: "800" },
   rebootingRow: { flexDirection: "row", gap: 10, alignItems: "center", marginTop: 4 },
   rebootingText: { fontSize: 14, fontWeight: "700" },
+  advCard: { borderRadius: 14, borderWidth: 1, paddingHorizontal: 4 },
+  advRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, paddingHorizontal: 12 },
+  advLeft: { flexDirection: "row", alignItems: "center", gap: 12 },
+  advLabel: { fontSize: 14, fontWeight: "700" },
+  advSub: { fontSize: 11, marginTop: 2, fontWeight: "600" },
+  advDivider: { height: 1, marginHorizontal: 12 },
 });

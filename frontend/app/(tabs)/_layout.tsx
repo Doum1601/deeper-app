@@ -1,8 +1,8 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { LayoutDashboard, Globe2, Smartphone, Settings as SettingsIcon } from "lucide-react-native";
+import { LayoutDashboard, Globe2, ShieldCheck, Smartphone, Settings as SettingsIcon } from "lucide-react-native";
 import { useApp } from "@/src/contexts/AppContext";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 
 export default function TabsLayout() {
   const { colors, t } = useApp();
@@ -21,7 +21,7 @@ export default function TabsLayout() {
           paddingTop: 8,
           paddingBottom: Platform.OS === "ios" ? 28 : 10,
         },
-        tabBarLabelStyle: { fontSize: 11, fontWeight: "700", letterSpacing: 0.4 },
+        tabBarLabelStyle: { fontSize: 10, fontWeight: "700", letterSpacing: 0.4 },
         sceneStyle: { backgroundColor: colors.baseBg },
       }}
     >
@@ -39,6 +39,14 @@ export default function TabsLayout() {
           title: t("tab_dpn"),
           tabBarIcon: ({ color, size }) => <Globe2 color={color} size={size - 2} strokeWidth={1.8} />,
           tabBarButtonTestID: "tab-dpn",
+        }}
+      />
+      <Tabs.Screen
+        name="security"
+        options={{
+          title: t("tab_security"),
+          tabBarIcon: ({ color, size }) => <ShieldCheck color={color} size={size - 2} strokeWidth={1.8} />,
+          tabBarButtonTestID: "tab-security",
         }}
       />
       <Tabs.Screen

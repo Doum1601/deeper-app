@@ -7,6 +7,8 @@ import { configureClient } from "@/src/api/deeper";
 
 type ThemeMode = "dark" | "light";
 
+export interface DeeperRecord { id: string; label: string; ip: string; active: boolean; }
+
 interface AppContextValue {
   // theme
   themeMode: ThemeMode;
@@ -49,6 +51,7 @@ const K = {
   bio: "deeper.bio",
   pin: "deeper.pin", // secure
   authed: "deeper.authed",
+  deepers: "deeper.devices",
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -63,11 +66,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [biometricEnabled, setBiometricEnabledState] = useState<boolean>(false);
   const [appLocked, setAppLocked] = useState<boolean>(false);
   const [hydrated, setHydrated] = useState<boolean>(false);
+  const [deepers, setDeepers] = useState<DeeperRecord[]>([]);
 
   // Hydrate from storage
   useEffect(() => {
     (async () => {
-      const [savedTheme, savedLang, savedIp, savedDemo, savedRem, savedBio, savedPin, savedAuth] = await Promise.all([
+      const [savedTheme, savedLang, savedIp, savedDemo, savedRem, savedBio, savedPin, savedAuth, savedDeepers] = await Promise.all([
         storage.getItem<string>(K.theme, ""),
         storage.getItem<string>(K.lang, ""),
         storage.getItem<string>(K.ip, ""),
@@ -76,6 +80,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         storage.getItem<boolean>(K.bio, false),
         storage.secureGet<string>(K.pin, ""),
         storage.getItem<boolean>(K.authed, false),
+        storage.getItem<string>(K.deepers, ""),
       ]);
       if (savedTheme === "dark" || savedTheme === "light") setThemeModeState(savedTheme);
       else setThemeModeState(sysTheme);
@@ -90,6 +95,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // If app should be locked at startup
       if (isAuthed && (savedPin || savedBio)) setAppLocked(true);
       configureClient({ ip: savedIp || "34.34.34.34", demo: savedDemo ?? true });
+      try {
+        const parsed: DeeperRecord[] = savedDeepers ? JSON.parse(savedDeepers) : [];
+        if (Array.isArray(parsed)) setDeepers(parsed);
+      } catch { /* ignore */ }
       setHydrated(true);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,6 +147,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await storage.removeItem(K.authed);
   }, []);
 
+  const persistDeepers = useCallback((list: DeeperRecord[]) => {
+    setDeepers(list);
+    storage.setItem(K.deepers, JSON.stringify(list));
+  }, []);
+
+  const addDeeper = useCallback((label: string, ip: string) => {
+    const item: DeeperRecord = { id: `dpr_${Date.now()}`, label, ip, active: false };
+    persistDeepers([...deepers, item]);
+  }, [deepers, persistDeepers]);
+
+  const removeDeeper = useCallback((id: string) => {
+    persistDeepers(deepers.filter(d => d.id !== id));
+  }, [deepers, persistDeepers]);
+
+  const switchDeeper = useCallback((id: string) => {
+    const target = deepers.find(d => d.id === id);
+    if (!target) return;
+    persistDeepers(deepers.map(d => ({ ...d, active: d.id === id })));
+    setDeeperIpState(target.ip);
+    storage.setItem(K.ip, target.ip);
+    configureClient({ ip: target.ip, demo: demoMode });
+  }, [deepers, demoMode, persistDeepers]);
+
   const colors = themeMode === "dark" ? darkTheme : lightTheme;
   const t = useCallback((key: TKey) => translations[lang][key] ?? key, [lang]);
 
@@ -147,8 +179,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     deeperIp, setDeeperIp, demoMode, setDemoMode,
     authed, setAuthed, remember, setRemember,
     pin, setPin, biometricEnabled, setBiometricEnabled,
-    appLocked, setAppLocked, hydrated, logout,
-  }), [themeMode, colors, setThemeMode, lang, setLang, t, deeperIp, setDeeperIp, demoMode, setDemoMode, authed, setAuthed, remember, setRemember, pin, setPin, biometricEnabled, setBiometricEnabled, appLocked, hydrated, logout]);
+    appLocked, setAppLocked, hydrated,
+    deepers, addDeeper, removeDeeper, switchDeeper,
+    logout,
+  }), [themeMode, colors, setThemeMode, lang, setLang, t, deeperIp, setDeeperIp, demoMode, setDemoMode, authed, setAuthed, remember, setRemember, pin, setPin, biometricEnabled, setBiometricEnabled, appLocked, hydrated, deepers, addDeeper, removeDeeper, switchDeeper, logout]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

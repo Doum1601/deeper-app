@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, Switch, Dimensions, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Activity, Cpu, MemoryStick, Thermometer, Clock, Users, Globe2, Shield, ChevronsRight, BellOff } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Activity, Cpu, MemoryStick, Thermometer, Clock, Users, Globe2, Shield, ChevronsRight, BellOff, ScrollText } from "lucide-react-native";
 import { useApp } from "@/src/contexts/AppContext";
 import { fetchState, setDpnEnabled, setAdblock, setParental, setMode, DeeperState, COUNTRIES } from "@/src/api/deeper";
 import { Sparkline } from "@/src/components/Sparkline";
@@ -140,6 +141,12 @@ export default function Dashboard() {
           <QuickRow color={colors} testID="quick-parental" icon={<Shield size={18} color={colors.accentPrimary} />} label={t("dash_parental")} value={state.parental} onChange={onToggleParental} />
         </View>
 
+        {/* Logs shortcut */}
+        <TouchableOpacity testID="dash-logs-link" onPress={() => router.push("/logs")} activeOpacity={0.8} style={[styles.logsLink, { borderColor: colors.borderStrong, backgroundColor: colors.surface }]}>
+          <ScrollText size={18} color={colors.accentPrimary} />
+          <Text style={[styles.logsLinkText, { color: colors.textPrimary }]}>{t("dash_logs")}</Text>
+        </TouchableOpacity>
+
         <View style={{ height: 24 }} />
       </ScrollView>
     </SafeAreaView>
@@ -211,4 +218,6 @@ const styles = StyleSheet.create({
   modeRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 16, paddingHorizontal: 18 },
   modeBadge: { borderWidth: 1, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5 },
   modeBadgeText: { fontSize: 11, fontWeight: "900", letterSpacing: 1, fontFamily: "monospace" },
+  logsLink: { flexDirection: "row", alignItems: "center", gap: 10, padding: 14, borderRadius: 12, borderWidth: 1, marginTop: 18 },
+  logsLinkText: { fontSize: 14, fontWeight: "700", flex: 1 },
 });
