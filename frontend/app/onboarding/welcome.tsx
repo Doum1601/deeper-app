@@ -37,10 +37,20 @@ export default function Welcome() {
             testID="welcome-visit-securityforge"
             activeOpacity={0.7}
             onPress={() => Linking.openURL("https://securityforge.ca")}
-            style={[styles.visitLink, { borderColor: colors.borderStrong, backgroundColor: colors.surface }]}
+            style={[styles.visitLink, { borderColor: colors.borderStrong, backgroundColor: colors.surface, marginBottom: 10 }]}
           >
             <ExternalLink size={14} color={colors.accentPrimary} strokeWidth={2} />
             <Text style={[styles.visitLinkText, { color: colors.accentPrimary }]}>{t("welcome_visit")}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            testID="welcome-visit-vpn"
+            activeOpacity={0.7}
+            onPress={() => Linking.openURL("https://meilleur-vpn-decentralise.com/")}
+            style={[styles.visitLink, { borderColor: colors.borderStrong, backgroundColor: colors.surface }]}
+          >
+            <ExternalLink size={14} color={colors.accentPrimary} strokeWidth={2} />
+            <Text style={[styles.visitLinkText, { color: colors.accentPrimary }]}>{t("welcome_visit_vpn")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

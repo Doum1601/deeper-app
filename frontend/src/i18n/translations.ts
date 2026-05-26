@@ -3,7 +3,8 @@ export const translations = {
     // Onboarding
     welcome_title: "Bienvenue",
     welcome_subtitle: "Contrôlez votre Deeper Connect depuis votre téléphone.",
-    welcome_visit: "Visiter securityforge.ca",
+    welcome_visit: "Visitez securityforge.ca pour mieux vous protéger",
+    welcome_visit_vpn: "Visiter meilleur-vpn-decentralise.com VPN / DPN",
     welcome_cta: "Commencer",
     scan_title: "Détection du Deeper",
     scan_subtitle: "Recherche de votre Deeper Connect sur le réseau local…",
@@ -227,7 +228,8 @@ export const translations = {
   en: {
     welcome_title: "Welcome",
     welcome_subtitle: "Control your Deeper Connect from your phone.",
-    welcome_visit: "Visit securityforge.ca",
+    welcome_visit: "Visit securityforge.ca to protect yourself better",
+    welcome_visit_vpn: "Visit meilleur-vpn-decentralise.com VPN / DPN",
     welcome_cta: "Get Started",
     scan_title: "Deeper Detection",
     scan_subtitle: "Looking for your Deeper Connect on the local network…",
