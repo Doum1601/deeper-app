@@ -35,8 +35,8 @@ export default function Lock() {
         setAppLocked(false);
         router.replace("/(tabs)/dashboard");
       }
-    } catch {
-      // ignore
+    } catch (e) {
+      console.warn("Biometric authentication error:", e);
     }
   };
 

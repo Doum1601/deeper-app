@@ -9,7 +9,7 @@ import { ScreenHeader } from "@/src/components/ScreenHeader";
 // Conditional import: react-native-webview doesn't exist on web build
 let WebView: any = null;
 if (Platform.OS !== "web") {
-  try { WebView = require("react-native-webview").WebView; } catch { /* ignore */ }
+  try { WebView = require("react-native-webview").WebView; } catch (e) { console.warn("react-native-webview unavailable on this platform:", e); }
 }
 
 export default function AtomOSWebView() {

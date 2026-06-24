@@ -98,7 +98,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const parsed: DeeperRecord[] = savedDeepers ? JSON.parse(savedDeepers) : [];
         if (Array.isArray(parsed)) setDeepers(parsed);
-      } catch { /* ignore */ }
+      } catch (e) { console.warn("Failed to parse saved Deepers list:", e); }
       setHydrated(true);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
